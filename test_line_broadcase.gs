@@ -2,14 +2,15 @@ const LINE_ACCESS_TOKEN = '';
 const LINE_ACCESS_TOKEN_REAL = '';
 const USER_ID = '';
 const HEADER_TEXT = 'บันทึกค่า Air chiller โรงไฟฟ้า'
+
 function parseNumberOrNaN(value) {
   const trimmed = value.toString().trim();
   return trimmed !== "" && !isNaN(trimmed) ? Number(trimmed) : NaN;
 }
 
 function differenceDetail(diff) {
-  if (diff > 10) {
-    return '(ขอแจ้งล้าง condenser)'
+  if (diff > 14) {
+    return '(ขอแจ้งล้าง Condenser)'
   } else {
     return '(ปกติ)'
   }
@@ -18,6 +19,11 @@ function differenceDetail(diff) {
 function roundTo2Decimals(value) {
   const num = Number(value);
   return isNaN(num) ? NaN : Math.round(num * 100) / 100;
+}
+
+function suffixDegreeFarenheit(value) {
+  var farenheitDegree = '\u2109';
+  return value + farenheitDegree;
 }
 
 function myFunction(e) {
@@ -34,11 +40,11 @@ function myFunction(e) {
 
   const text = [
     HEADER_TEXT,
-    textLine("Air Chiller No.", airChillerNo),
+    textLine("Chiller No.", airChillerNo),
     textLine("วัน เวลา", `${date} ${time}`),
-    textLine("Saturate Cond.Temp.", satCondTemp.toString()),
-    textLine("Condenser Leaving Temp.", conLeaveTemp,toString()),
-    textLine("difference", roundTo2Decimals(diff)),
+    textLine("Saturate Cond.Temp.", suffixDegreeFarenheit(satCondTemp.toString())),
+    textLine("Condenser Leaving Temp.", suffixDegreeFarenheit(conLeaveTemp.toString())),
+    textLine("Approach Temp.", suffixDegreeFarenheit(roundTo2Decimals(diff))),
     differenceDetail(diff),
     textLine("ผู้บันทึก", formResp[6])
   ].join("\n");
